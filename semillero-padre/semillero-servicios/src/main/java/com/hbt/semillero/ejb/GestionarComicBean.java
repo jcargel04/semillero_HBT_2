@@ -46,6 +46,25 @@ public class GestionarComicBean implements IGestionarComicLocal {
 		em.persist(comic);
 	}
 
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void editarComic(ComicDTO comicAEditar) {
+		
+		Comic comicModificar;
+		comicModificar = em.find(Comic.class, comicAEditar.getId().toString());
+		
+		comicModificar.setNombre(comicAEditar.getNombre().toString());
+		comicModificar.setEditorial(comicAEditar.getEditorial().toString());
+		comicModificar.setTematicaEnum(comicAEditar.getTematicaEnum());
+		comicModificar.setColeccion(comicAEditar.getColeccion().toString());
+		comicModificar.setNumeroPaginas(comicAEditar.getNumeroPaginas());
+		comicModificar.setPrecio(comicAEditar.getPrecio());
+		comicModificar.setAutores(comicAEditar.getAutores().toString());
+		comicModificar.setColor(comicAEditar.getColor().booleanValue());
+		comicModificar.setCantidad(comicAEditar.getCantidad());
+		em.merge(comicModificar);
+		
+	}
 	/**
 	 * 
 	 * @see com.hbt.semillero.ejb.IGestionarComicLocal#modificarComic(com.hbt.semillero.dto.ComicDTO)
@@ -62,17 +81,27 @@ public class GestionarComicBean implements IGestionarComicLocal {
 		comicModificar.setNombre(nombre);
 		em.merge(comicModificar);
 	}
+	
+	
 
 	/**
 	 * 
 	 * @see com.hbt.semillero.ejb.IGestionarComicLocal#eliminarComic(java.lang.Long)
 	 */
+//	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+//	public void eliminarComic(Long idComic) {
+//		Comic comicEliminar = em.find(Comic.class, idComic);
+//		if (comicEliminar != null) {
+//			em.remove(comicEliminar);
+//		}
+//	}
+	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void eliminarComic(Long idComic) {
 		Comic comicEliminar = em.find(Comic.class, idComic);
 		if (comicEliminar != null) {
 			em.remove(comicEliminar);
-		}
+		}		
 	}
 
 	/**
@@ -95,6 +124,7 @@ public class GestionarComicBean implements IGestionarComicLocal {
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public List<ComicDTO> consultarComics() {
 		List<ComicDTO> resultadosComicDTO = new ArrayList<ComicDTO>();
+		@SuppressWarnings("unchecked")
 		List<Comic> resultados = em.createQuery("select c from Comic c").getResultList();
 		for (Comic comic:resultados) {
 			resultadosComicDTO.add(convertirComicToComicDTO(comic));
@@ -112,7 +142,8 @@ public class GestionarComicBean implements IGestionarComicLocal {
 	private ComicDTO convertirComicToComicDTO(Comic comic) {
 		ComicDTO comicDTO = new ComicDTO();
 		if(comic.getId()!=null) {
-		 comicDTO.setId(comic.getId().toString());
+		 //comicDTO.setId(comic.getId().toString());
+		 comicDTO.setId(comic.getId());
 		}
 		comicDTO.setNombre(comic.getNombre());
 		comicDTO.setEditorial(comic.getEditorial());
@@ -138,7 +169,8 @@ public class GestionarComicBean implements IGestionarComicLocal {
 	private Comic convertirComicDTOToComic(ComicDTO comicDTO) {
 		Comic comic = new Comic();
 		if(comicDTO.getId()!=null) {
-			comic.setId(Long.parseLong(comicDTO.getId()));
+			//comic.setId(Long.parseLong(comicDTO.getId()));
+			comic.setId((comicDTO.getId()));
 		}
 		comic.setNombre(comicDTO.getNombre());
 		comic.setEditorial(comicDTO.getEditorial());
@@ -153,4 +185,7 @@ public class GestionarComicBean implements IGestionarComicLocal {
 		comic.setCantidad(comicDTO.getCantidad());
 		return comic;
 	}
+
+	
+	
 }

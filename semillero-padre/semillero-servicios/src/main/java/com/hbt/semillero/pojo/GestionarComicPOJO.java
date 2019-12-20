@@ -39,7 +39,7 @@ public class GestionarComicPOJO {
 		// Se crea e instancia un objeto de tipo ComicDTO
 		ComicDTO comic = new ComicDTO();
 		TematicaEnum aventuras = TematicaEnum.AVENTURAS;
-		comic.setId("100");
+		comic.setId((long) 100);
 		comic.setNombre("EL EJÉRCITO DEL CAPITÁN AMÉRICA");
 		comic.setEditorial("Panini Comics ");
 		comic.setTematicaEnum(aventuras);
@@ -116,7 +116,7 @@ public class GestionarComicPOJO {
 	 * @param idComic identificador del comic a ser buscado
 	 * @return comic encontrado
 	 */
-	public ComicDTO consultarComicDTO(String idComic) {
+	public ComicDTO consultarComicDTO(Long idComic) {
 		// validacion que permite determinar si una lista esta inicializada y tiene
 		// elementos
 		if (listaComics != null && !listaComics.isEmpty()) {

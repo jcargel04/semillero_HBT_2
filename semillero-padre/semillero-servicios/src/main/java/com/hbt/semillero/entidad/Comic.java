@@ -63,6 +63,7 @@ public class Comic implements Serializable {
 	@Id
 	@SequenceGenerator(allocationSize = 1, name = "COMIC_SCID_GENERATOR", sequenceName = "SEQ_COMIC")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMIC_SCID_GENERATOR")
+	
 	@Column(name = "SCID")
 	public Long getId() {
 		return id;

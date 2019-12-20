@@ -8,7 +8,7 @@ export class ComicDTO {
     /**
     * Indicador de resultado.
     */
-    public id: string;
+    public id: number;
 
     /**
     * Indicador de resultado.

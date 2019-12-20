@@ -101,6 +101,16 @@ public class GestionarComicRest {
 		
 	}
 
+	@POST
+	@Path("/editar")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResultadoDTO editarComic(ComicDTO comicAEditar) {
+		gestionarComicEJB.editarComic(comicAEditar);
+		ResultadoDTO resultadoDTO = new ResultadoDTO(Boolean.TRUE, "Comic creado exitosamente");
+		return resultadoDTO;
+	}
+	
 	/**
 	 * 
 	 * Metodo encargado de modificar el nombre de un comic
@@ -126,8 +136,8 @@ public class GestionarComicRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void eliminarComic(@QueryParam("idComic") Long idComic) {
 		if (idComic != null) {
-			ComicDTO comicDTO = gestionarComicEJB.consultarComic(idComic.toString());
-
+			//ComicDTO comicDTO = gestionarComicEJB .eliminarComic(idComic);
+			gestionarComicEJB.eliminarComic(idComic);
 		}
 	}
 }

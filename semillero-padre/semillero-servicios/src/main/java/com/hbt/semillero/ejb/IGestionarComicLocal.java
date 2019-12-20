@@ -28,6 +28,7 @@ public interface IGestionarComicLocal {
 	 */
 	public void crearComic(ComicDTO comicNuevo);
 
+	public void editarComic(ComicDTO comicAEditar);
 	/**
 	 * 
 	 * Metodo encargado de consultar un comic modificarlo y guardarlo
@@ -45,6 +46,7 @@ public interface IGestionarComicLocal {
 	 * @author ccastano
 	 * 
 	 * @param comicEliminar informacion a eliminar
+	 * @return 
 	 */
 	public void eliminarComic(Long idComic);
 
@@ -65,4 +67,7 @@ public interface IGestionarComicLocal {
 	 * @return
 	 */
 	public List<ComicDTO> consultarComics();
+	
+	
+	
 }

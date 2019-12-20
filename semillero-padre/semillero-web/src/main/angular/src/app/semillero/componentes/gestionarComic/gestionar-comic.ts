@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GestionarComicService } from '../../services/gestionar-comics.service';
+import { strict } from 'assert';
 
 /**
  * @description Componenete gestionar comic, el cual contiene la logica CRUD
@@ -68,6 +69,9 @@ export class GestionarComicComponent implements OnInit {
 
     public mostrarMensaje : boolean;
 
+    public idComicAEliminar : number;
+    public idComicAEditar : number; 
+
     /**
      * @description Este es el constructor del componente GestionarComicComponent
      * @author Diego Fernando Alvarez Silva <dalvarez@heinsohn.com.co>
@@ -105,6 +109,7 @@ export class GestionarComicComponent implements OnInit {
         console.log("Ejecuto linea 97")
         this.gestionarComicService.consultarComics().subscribe(listaComics => {
             this.listaComics = listaComics
+            console.log(JSON.stringify(this.listaComics));
         }, error => {
             console.log("Se ha presentado un error al consumir el servicio de consultarComics: " + error);
         });
@@ -115,33 +120,69 @@ export class GestionarComicComponent implements OnInit {
      * @description Metodo que permite validar el formulario y crear o actulizar un comic
      */
     public crearActualizarComic() : void {
+        
         this.submitted = true;
         if (this.gestionarComicForm.invalid) {
             return;
         }
 
-        this.comic = new ComicDTO();
-        this.comic.nombre = this.gestionarComicForm.controls.nombre.value;
-        this.comic.editorial = this.gestionarComicForm.controls.editorial.value;
-        this.comic.tematica = this.gestionarComicForm.controls.tematica.value;
-        this.comic.coleccion = this.gestionarComicForm.controls.coleccion.value;
-        this.comic.numeroPaginas = this.gestionarComicForm.controls.numeroPaginas.value;
-        this.comic.precio = this.gestionarComicForm.controls.precio.value;
-        this.comic.autores = this.gestionarComicForm.controls.autores.value;
-        this.comic.color = this.gestionarComicForm.controls.color.value;
-        this.comic.cantidad = 5;
+        if (this.editando != true) {
 
-        this.gestionarComicService.crearComic(this.comic).subscribe(resultado => {
-            this.mostrarMensaje = true
-            this.mensajeExito = resultado.mensajeEjecucion;
-            // if (resultado.exitoso){
-                this.limpiarFormulario();
-                this.consultarComics();
-                this.mostrarMensaje = true;
-            // }
-        }, error => {
-            console.log("Se he presentado un error al consumir el servicio de consultarComics(): ")
-        })
+            this.comic = new ComicDTO();
+            this.comic.nombre = this.gestionarComicForm.controls.nombre.value;
+            this.comic.editorial = this.gestionarComicForm.controls.editorial.value;
+            this.comic.tematica = this.gestionarComicForm.controls.tematica.value;
+            this.comic.coleccion = this.gestionarComicForm.controls.coleccion.value;
+            this.comic.numeroPaginas = this.gestionarComicForm.controls.numeroPaginas.value;
+            this.comic.precio = this.gestionarComicForm.controls.precio.value;
+            this.comic.autores = this.gestionarComicForm.controls.autores.value;
+            this.comic.color = this.gestionarComicForm.controls.color.value;
+            this.comic.cantidad = 5;
+
+            console.log(this.comic);
+
+            this.gestionarComicService.crearComic(this.comic).subscribe(resultado => {
+                this.mostrarMensaje = true
+                this.mensajeExito = resultado.mensajeEjecucion;
+                // if (resultado.exitoso){
+                    this.limpiarFormulario();
+                    this.consultarComics();
+                    this.mostrarMensaje = true;
+                // }
+            }, error => {
+                console.log("Se he presentado un error al consumir el servicio de consultarComics(): ")
+            })
+
+        }else{
+            
+            this.comic = new ComicDTO();
+            this.comic.id = Number(this.idComicAEditar);
+            this.comic.nombre = this.gestionarComicForm.controls.nombre.value;
+            this.comic.editorial = this.gestionarComicForm.controls.editorial.value;
+            this.comic.tematica = this.gestionarComicForm.controls.tematica.value;
+            this.comic.coleccion = this.gestionarComicForm.controls.coleccion.value;
+            this.comic.numeroPaginas = Number(this.gestionarComicForm.controls.numeroPaginas.value);
+            this.comic.precio = Number(this.gestionarComicForm.controls.precio.value);
+            this.comic.autores = this.gestionarComicForm.controls.autores.value;
+            this.comic.color = this.gestionarComicForm.controls.color.value;
+            this.comic.cantidad = Number(10);
+
+            this.gestionarComicService.editarComic(this.comic).subscribe(resultado => {
+                this.mostrarMensaje = true
+                this.mensajeExito = resultado.mensajeEjecucion;
+                // if (resultado.exitoso){
+                    this.limpiarFormulario();
+                    this.consultarComics();
+                    this.mostrarMensaje = true;
+                // }
+            }, error => {
+                console.log("Se he presentado un error al consumir el servicio de editarComics(): ")
+            })
+
+        }
+      
+        
+
 
         //this.listaComics.push(this.comic);
         
@@ -199,6 +240,9 @@ export class GestionarComicComponent implements OnInit {
      * @param posicion en la lista del comic seleccionado
      */
     public modificarComic(posicion : number) : void {
+        
+        this.idComicAEditar = Number(this.listaComics[posicion].id);
+        
         let comic = this.listaComics[posicion];
         this.editando = true;
         this.indicePosicion = posicion;
@@ -225,24 +269,48 @@ export class GestionarComicComponent implements OnInit {
      * Metodo que permite la eliminación un comic de la tabla y sus detalles
      * @param idComicAEliminar en la lista del comic seleccionado
      */
-    public eliminarComic(idComicAEliminar : number) : void {
+    public eliminarComic(posicion : number) : void {
         
+        let idComicAEliminar = Number(this.listaComics[posicion].id);
+
         try {
-            // variable que almacena el comic según el indice del array
-            let comic = this.listaComics[idComicAEliminar];
-            this.comicSeleccionado = this.listaComics.slice(idComicAEliminar, idComicAEliminar + 1);
-            // Eliminamos el comic según el la posición indicada en la tabla
-            this.listaComics.splice(idComicAEliminar, 1);
-            // almacenamos el nombre del comic para posteriormente mostrarlo en una alerta
-            this.nombreDelComicEliminado = this.comicSeleccionado[0].nombre;
-            // Asignamos en verdadero la variable que indentifica que el elemento fue eliminado.
-            this.fueEliminado = true;
-            console.log("El Comic " + this.comicSeleccionado[idComicAEliminar].nombre + " ha sido eliminado!");
+            this.gestionarComicService.eliminarComic(idComicAEliminar).subscribe(resultado => {
+                //this.mostrarMensaje = true
+                //this.mensajeExito = resultado.mensajeEjecucion;
+                // if (resultado.exitoso){
+                   this.limpiarFormulario();
+                   this.consultarComics();
+                //    this.mostrarMensaje = true;
+                // }
+                console.log("El comic fue eliminado!")
+            }, error => {
+                console.log("Se he presentado un error al consumir el servicio de eliminarComics(): " + error)
+            })    
         } catch (error) {
-            console.log("Error al eliminar el Comic seleccionado!");
-            // Asignamos en false la variable que indentifica que el elemento fue eliminado.
-            this.fueEliminado = false;
+            console.log("Error en la función de eliminar, el comic no fue eliminado." + error)
         }
+
+        
+
+
+        // try {
+        //     // variable que almacena el comic según el indice del array
+        //     let comic = this.listaComics[idComicAEliminar];
+        //     this.comicSeleccionado = this.listaComics.slice(idComicAEliminar, idComicAEliminar + 1);
+        //     // Eliminamos el comic según el la posición indicada en la tabla
+        //     this.listaComics.splice(idComicAEliminar, 1);
+        //     // almacenamos el nombre del comic para posteriormente mostrarlo en una alerta
+        //     this.nombreDelComicEliminado = this.comicSeleccionado[0].nombre;
+        //     // Asignamos en verdadero la variable que indentifica que el elemento fue eliminado.
+        //     this.fueEliminado = true;
+        //     console.log("El Comic " + this.comicSeleccionado[idComicAEliminar].nombre + " ha sido eliminado!");
+        // } catch (error) {
+        //     console.log("Error al eliminar el Comic seleccionado!");
+        //     // Asignamos en false la variable que indentifica que el elemento fue eliminado.
+        //     this.fueEliminado = false;
+        // }
+
+
     }
 
      /**

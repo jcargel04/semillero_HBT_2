@@ -20,7 +20,7 @@ public class ComicDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String id;
+	private Long id;
 	private String nombre;
 	private String editorial;
 	private TematicaEnum tematicaEnum;
@@ -38,17 +38,17 @@ public class ComicDTO implements Serializable {
 	 * 
 	 * @return El id asociado a la clase
 	 */
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
 	/**
 	 * Metodo encargado de modificar el valor del atributo id
 	 * 
-	 * @param id El nuevo id a modificar.
+	 * @param i El nuevo id a modificar.
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setId(Long i) {
+		this.id = i;
 	}
 
 	/**
