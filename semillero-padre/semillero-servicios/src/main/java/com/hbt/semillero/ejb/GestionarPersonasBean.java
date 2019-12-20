@@ -10,6 +10,8 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import com.hbt.semillero.dto.PersonasDTO;
 import com.hbt.semillero.entidad.Personas;
 
@@ -83,13 +85,14 @@ public class GestionarPersonasBean implements IGestionarPersonasLocal {
 	public List<PersonasDTO> consultaTodasPersonas() {
 		List<PersonasDTO> resultadosPersonasDTO = new ArrayList<PersonasDTO>();
 		@SuppressWarnings("unchecked")
-		List<Personas> resultadosPersonas = em.createQuery("select p from Personas p").getResultList();
+		List<Personas> resultadosPersonas = em.createQuery("Select p from Personas p").getResultList();
 		for (Personas personas:resultadosPersonas) {
 			resultadosPersonasDTO.add(convertirPersonasAPersonasDTO(personas));
 		}
 		return resultadosPersonasDTO;
 	}
-	
+
+
 
 	
 	

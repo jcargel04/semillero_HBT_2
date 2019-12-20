@@ -1,1 +1,76 @@
+<div class="container">
+    <form [formGroup]="gestionarPersonasForm">
+        <h1>Gestionar Personas</h1>
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                <label for="nombreComic">Id:</label>
+                <input type="text" class="form-control" id="per_num_dcto" formControlName="per_num_dcto">
+            </div>
 
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="per_tipo_dcto">Tipo Doc:</label>
+                        <select class="form-control" id="per_tipo_dcto" formControlName="per_tipo_dcto">
+                            <option value="CC">CEDULA DE CIUDADANIA</option>
+                            <option value="NI">NIT</option>
+                            <option value="CE">CEDULA DE EXTRANJERIA</option>
+                            <option value="PA">PASAPORTE</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <label for="coleccion">Nombre Completo:</label>
+                    <input type="text" class="form-control" id="per_nombre" formControlName="per_nombre">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <label for="editorialComic">Fecha Nacimineto:</label>
+                <input type="text" class="form-control" id="per_fecha_nac" formControlName="per_fecha_nac">
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-6">
+                <span></span>
+            </div>
+            <div class="col-6 text-right">
+                <button type="button" class="btn btn-primary" (click)="crearPersona()">Registrar</button>
+            </div>
+        </div>
+
+        <br>
+        
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">TipoDcto</th>
+                            <th scope="col">Nombre Completo</th>
+                            <th scope="col">Fecha Nac</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let personas of listaPersonas;let i=index;">
+                            <td>{{personas.per_tipo_dcto | uppercase }}</td>
+                            <td>{{personas.per_nombre | uppercase }}</td>
+                            <td>{{personas.per_fecha_nac}}</td>
+                            <td>
+                                <i class="fas fa-search 2x ml-1" (click)="navegarConsultarComic(i)" title="Consultar"></i>
+                                <i class="fas fa-pencil-alt 2x ml-1" (click)="modificarComic(i)" title="Editar"></i>
+                                <i class="far fa-times-circle 2x ml-1" (click)="eliminarComic(i)" title="Eliminar"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </form>
+
+</div>

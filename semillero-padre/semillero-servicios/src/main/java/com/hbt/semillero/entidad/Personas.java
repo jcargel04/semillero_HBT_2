@@ -73,8 +73,8 @@ public class Personas implements Serializable {
 		return per_fecha_nac;
 	}
 
-	public void setPer_fecha_nac(LocalDate per_fecha_nac) {
-		this.per_fecha_nac = per_fecha_nac;
+	public void setPer_fecha_nac(LocalDate localDate) {
+		this.per_fecha_nac = localDate;
 	}
 
 

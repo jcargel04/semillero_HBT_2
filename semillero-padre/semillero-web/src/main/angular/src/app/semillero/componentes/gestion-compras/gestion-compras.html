@@ -1,0 +1,25 @@
+<div class="container">
+    <form [formGroup]="relacionarPersonasComicForm">
+        <h1>Relacionar Personas - Comic</h1>
+        <hr>
+        <div class="row">
+            <tr *ngFor="let personas of listaPersonas;let i=index;">
+                <select class="form-control" id="per_tipo_dcto" formControlName="idcomic">
+                    <option value={{comic.id}}></option>>
+                </select>
+            </tr>
+            <br>
+            <tr *ngFor="let personas of listaComic;let i=index;">
+                <select class="form-control" id="per_tipo_dcto" formControlName="per_num_dcto">
+                    <option value={{comic.id}}></option>>
+                </select>
+            </tr>
+
+
+        </div>
+
+
+
+    </form>
+
+</div>

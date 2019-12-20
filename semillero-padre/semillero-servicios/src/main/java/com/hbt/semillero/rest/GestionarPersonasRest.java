@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.hbt.semillero.dto.ComicDTO;
 import com.hbt.semillero.dto.PersonasDTO;
 import com.hbt.semillero.dto.ResultadoDTO;
 import com.hbt.semillero.ejb.IGestionarPersonasLocal;
@@ -58,6 +59,9 @@ public class GestionarPersonasRest {
 	public List<PersonasDTO> consultarATodasLasPersonas() {
 		return gestionarPersonasEJB.consultaTodasPersonas();
 	}	
+	
+	
+	
 	
 	
 	
